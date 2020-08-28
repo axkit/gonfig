@@ -128,3 +128,36 @@ func TestInt(t *testing.T) {
 	}
 
 }
+
+func Benchmark_intassign(b *testing.B) {
+	ref := new(int)
+	var i int
+	for i = 0; i < b.N; i++ {
+		*ref = i
+	}
+}
+
+func Benchmark_IntSet(b *testing.B) {
+	a := gonfig.NewInt()
+	for i := 0; i < b.N; i++ {
+		a.Set(i)
+	}
+}
+
+func Benchmark_intread(b *testing.B) {
+	ref := new(int)
+	*ref = 90
+	for i := 0; i < b.N; i++ {
+		k := *ref
+		_ = k
+	}
+}
+
+func Benchmark_IntVal(b *testing.B) {
+	a := gonfig.NewInt()
+	a.Set(90)
+	for i := 0; i < b.N; i++ {
+		k := a.Val()
+		_ = k
+	}
+}
