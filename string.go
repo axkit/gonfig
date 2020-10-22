@@ -6,7 +6,7 @@ import (
 )
 
 // NonBindedString is returned by method Val
-// if Int is not initialized yet.
+// if String is not initialized yet.
 var NonBindedString string = ""
 
 // String implements atomic string.

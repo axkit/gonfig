@@ -11,7 +11,7 @@ import (
 
 var (
 	// NonBindedFloat is returned by method Val
-	// if Int is not initialized yet.
+	// if Float is not initialized yet.
 	NonBindedFloat float64 = 0.0
 
 	// DefaultFmtStyle used in String method.

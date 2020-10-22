@@ -8,7 +8,7 @@ import (
 )
 
 // NonBindedBool is returned by method Val
-// if Int is not initialized yet.
+// if Bool is not initialized yet.
 var NonBindedBool bool = false
 
 // A Bool implements Valuer as atomic bool,
@@ -111,4 +111,10 @@ func (a *Bool) Parse(s string) error {
 		return ErrInvalidBool
 	}
 	return nil
+}
+
+// IsBool tries to guess is string contains boolean or not.
+func IsBool(s string) bool {
+	s = strings.ToLower(s)
+	return s == "true" || s == "false"
 }

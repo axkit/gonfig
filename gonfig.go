@@ -93,11 +93,11 @@ type Valuer interface {
 	IsBinded() bool
 }
 
-// ConfigSource is an interface wrapping a single method ApplyTo.
+// ConfigSourcer is an interface wrapping a single method ApplyTo.
 //
 // ApplyTo reads parameters from the source: database, file, env, etc.
 // and adds them into config param container. Value overwrites if overwrite is true.
-type ConfigSource interface {
+type ConfigSourcer interface {
 	ApplyTo(g Configer, overwrite bool) error
 }
 
