@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/axkit/gonfig"
-	"github.com/axkit/gonfig/gonfsrc"
+	"github.com/axkit/gonfig/gonfigenv"
 )
 
 func TestEnvSource_CopyTo(t *testing.T) {
 
 	cfg := gonfig.New()
 
-	if err := gonfsrc.NewEnvSource("GO", true).ApplyTo(cfg, false); err != nil {
+	if err := gonfigenv.NewEnvSource("GO", true).ApplyTo(cfg, false); err != nil {
 		t.Error(err)
 	}
 
