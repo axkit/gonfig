@@ -200,30 +200,39 @@ func (c *Config) bindStruct(structAddr interface{}) []error {
 			}
 			fai := s.Field(i).Addr().Interface()
 
+			// assigns default value if parametr was not initialized before.
+			def := tof.Field(i).Tag.Get("default")
+			_, wasinit := c.idx[code]
+
 			p, err := c.param(code, fai.(Valuer).Kind(), false)
 			if err != nil {
 				res = append(res, err)
 				continue
 			}
 
-			defv := tof.Field(i).Tag.Get("default")
-			_, ok := c.idx[code]
-			if !ok && defv != "" {
-				if err := p.Parse(defv); err != nil {
+			if !wasinit && def != "" {
+				if err := p.Parse(def); err != nil {
 					res = append(res, err)
-					continue
 				}
 			}
 
 			switch p.Kind() {
 			case ABool:
-				fai.(*Bool).Bind(p.(*Bool))
+				if a := fai.(*Bool); !a.IsBinded() {
+					a.Bind(p.(*Bool))
+				}
 			case AString:
-				fai.(*String).Bind(p.(*String))
+				if a := fai.(*String); !a.IsBinded() {
+					a.Bind(p.(*String))
+				}
 			case AInt:
-				fai.(*Int).Bind(p.(*Int))
+				if a := fai.(*Int); !a.IsBinded() {
+					a.Bind(p.(*Int))
+				}
 			case AFloat:
-				fai.(*Float).Bind(p.(*Float))
+				if a := fai.(*Float); !a.IsBinded() {
+					a.Bind(p.(*Float))
+				}
 			}
 			c.setStat(code, asked)
 			continue
