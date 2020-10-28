@@ -42,11 +42,15 @@ func (a *String) Set(s string) {
 // Val returns value atomically. Returns NonBindedString
 // if it's not binded to params container.
 func (a *String) Val() string {
+
 	ptr := atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(&a.ref)))
 	if ptr == nil {
 		return NonBindedString
 	}
 	s := atomic.LoadPointer((*unsafe.Pointer)(unsafe.Pointer(ptr)))
+	if s == nil {
+		return NonBindedString
+	}
 	return *(*string)(s)
 }
 
@@ -71,12 +75,16 @@ func (a *String) String() string {
 
 // MarshalJSON implement Marshaller interface.
 func (a String) MarshalJSON() ([]byte, error) {
-	return []byte(a.String()), nil
+	val := a.Val()
+	return []byte("\"" + val + "\""), nil
 }
 
 // UnmarshalJSON implement Unmarshaller interface.
 func (a *String) UnmarshalJSON(buf []byte) error {
-	v := string(buf)
+	if len(buf) < 2 {
+		return nil
+	}
+	v := string(buf[1 : len(buf)-1])
 	a.Set(v)
 	return nil
 }
