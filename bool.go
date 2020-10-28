@@ -56,7 +56,7 @@ func (a *Bool) Val() bool {
 	if ptr == nil {
 		return NonBindedBool
 	}
-	return int(atomic.LoadInt32((*int32)(ptr))) == 1
+	return atomic.LoadInt32((*int32)(ptr)) == 1
 }
 
 // IsBinded returns true if Bool bineded to params container.
