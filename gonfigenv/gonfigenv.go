@@ -34,20 +34,27 @@ func (s *EnvSource) applyTo(g gonfig.Configer, ow bool) error {
 			continue
 		}
 
-		code := pair[0]
+		code := pair[0][len(s.prefix):]
 		if s.tolower {
 			code = strings.ToLower(code)
 		}
 
-		var err error
-		if !ow && g.IsExist(code) {
+		p, ok := g.Get(code)
+		if ok {
+			if !ow {
+				continue
+			}
+			if err := p.Parse(pair[1]); err != nil {
+				return err
+			}
 			continue
 		}
 
-		err = g.MustParam(code, gonfig.AString).Parse(pair[1])
-		if err != nil {
+		// parameter was not found
+		if err := g.MustParam(code, gonfig.AString).Parse(pair[1]); err != nil {
 			return err
 		}
+
 	}
 	return nil
 }
